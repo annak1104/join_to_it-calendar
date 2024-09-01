@@ -1,6 +1,6 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import CalendarView from "./Components/CalendarView/CalendarView";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ChakraProvider } from '@chakra-ui/react';
+import CalendarView from './Components/CalendarView/CalendarView';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +17,7 @@ function App() {
   return (
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
-        <div style={{ height: "95vh" }}>
+        <div style={{ height: '95vh' }}>
           <CalendarView />
         </div>
       </QueryClientProvider>

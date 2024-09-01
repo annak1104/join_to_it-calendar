@@ -34,7 +34,7 @@
 }
 
 .rbc-day-slot .rbc-time-slot:after {
-  content: "";
+  content: '';
   width: 100%;
   border-top: 1px solid lightblue;
   display: block;
