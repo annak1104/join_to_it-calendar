@@ -17,6 +17,17 @@ import { Appointment } from '../../types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { HexColorPicker } from 'react-colorful';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  event: Yup.string()
+    .required('Event is required')
+    .max(30, 'Event must be at most 30 characters'),
+  status: Yup.string(),
+  start: Yup.date().min(new Date(), 'Start time cannot be in the past'),
+  end: Yup.date().min(Yup.ref('start'), 'End time must be after start time'),
+  color: Yup.string().required('Color is required'),
+});
 
 interface EventFormProps {
   appointment: Appointment;
@@ -58,6 +69,7 @@ export default function EventForm({
   return (
     <Box boxShadow={'2xl'} padding="5" rounded="xl" bg="white" width="100%">
       <Formik
+        initialValues={initialValues}
         onSubmit={async values => {
           const updatedAppointment = {
             ...values,
@@ -67,10 +79,10 @@ export default function EventForm({
           };
           onSubmit(updatedAppointment);
         }}
-        initialValues={initialValues}
+        validationSchema={validationSchema}
         enableReinitialize
       >
-        {({ values, setFieldValue }) => (
+        {({ values, setFieldValue, errors, touched }) => (
           <Form>
             <Flex justifyContent={'space-between'} alignItems="center">
               <Box>
@@ -90,26 +102,32 @@ export default function EventForm({
             </Flex>
             <Field name="event">
               {({ field }: FieldProps<string>) => (
-                <FormControl>
+                <FormControl isInvalid={!!errors.event && touched.event}>
                   <FormLabel>Event</FormLabel>
-                  <Input {...field} value={field.value || ''} maxLength={30} />
+                  <Input {...field} value={field.value || ''} />
+                  {errors.event && touched.event && (
+                    <Text color="red.500">{errors.event}</Text>
+                  )}
                 </FormControl>
               )}
             </Field>
             <Field name="status">
               {({ field }: FieldProps<string>) => (
-                <FormControl>
+                <FormControl isInvalid={!!errors.status && touched.status}>
                   <FormLabel>Status</FormLabel>
                   <Select {...field}>
                     <option value="CI">Checked In</option>
                     <option value="P">Pending</option>
                   </Select>
+                  {errors.status && touched.status && (
+                    <Text color="red.500">{errors.status}</Text>
+                  )}
                 </FormControl>
               )}
             </Field>
             <Field name="color">
               {({ field }: FieldProps<string>) => (
-                <FormControl>
+                <FormControl isInvalid={!!errors.color && touched.color}>
                   <FormLabel>Color</FormLabel>
                   <Box>
                     <HexColorPicker
@@ -128,12 +146,15 @@ export default function EventForm({
                       border="1px solid #ccc"
                     />
                   </Box>
+                  {errors.color && touched.color && (
+                    <Text color="red.500">{errors.color}</Text>
+                  )}
                 </FormControl>
               )}
             </Field>
             <Flex gap={4} mt={4} display={'flex'} flexDirection={'column'}>
               <Flex flexBasis={'50%'}>
-                <FormControl>
+                <FormControl isInvalid={!!errors.start && !!touched.start}>
                   <FormLabel>Start Time</FormLabel>
                   <DatePicker
                     selected={values.start}
@@ -142,10 +163,13 @@ export default function EventForm({
                     dateFormat="MMMM d, yyyy h:mm aa"
                     className="custom-datepicker"
                   />
+                  {errors.start && touched.start && (
+                    <Text color="red.500">{errors.start as string}</Text>
+                  )}
                 </FormControl>
               </Flex>
               <Flex flexBasis={'50%'}>
-                <FormControl>
+                <FormControl isInvalid={!!errors.end && !!touched.end}>
                   <FormLabel>End Time</FormLabel>
                   <DatePicker
                     selected={values.end}
@@ -154,6 +178,9 @@ export default function EventForm({
                     dateFormat="MMMM d, yyyy h:mm aa"
                     className="custom-datepicker"
                   />
+                  {errors.start && touched.start && (
+                    <Text color="red.500">{errors.start as string}</Text>
+                  )}
                 </FormControl>
               </Flex>
             </Flex>

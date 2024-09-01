@@ -13,6 +13,11 @@ export default [
       "no-console": "warn",
       "react/react-in-jsx-scope": "off",
     },
+    settings: {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
