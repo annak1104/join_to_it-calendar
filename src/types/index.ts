@@ -4,7 +4,7 @@ export type Appointment = {
   event?: string;
   start: string | Date;
   end: string | Date;
-  color?: string | "#c7edca";
+  color?: string | '#c7edca';
 };
 
 export type EventItem = {

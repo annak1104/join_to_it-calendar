@@ -1,7 +1,7 @@
 .custom-datepicker {
-    width: 250px;
-    cursor: pointer;
+  width: 250px;
+  cursor: pointer;
 }
 .custom-colorpicker {
-    z-index: 1;
+  z-index: 1;
 }
